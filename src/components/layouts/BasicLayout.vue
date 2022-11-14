@@ -16,15 +16,24 @@
 
   <van-tabbar route @change="onChange">
     <van-tabbar-item to="/" icon="home-o" name="index">主页</van-tabbar-item>
-    <van-tabbar-item to="/Team" icon="search" name="team">队伍</van-tabbar-item>
-    <van-tabbar-item to="/User" icon="friends-o" name="user">个人</van-tabbar-item>
+    <van-tabbar-item to="/team" icon="search" name="team">队伍</van-tabbar-item>
+    <van-tabbar-item to="/user" icon="friends-o" name="user">个人</van-tabbar-item>
   </van-tabbar>
 </template>
 
 <script setup>
   import { Toast } from 'vant';
-  const onClickLeft = () => alert('左');
-  const onClickRight = () => alert('右');
+  import {useRouter} from 'vue-router';
+
+
+  const router = useRouter();
+
+  const onClickLeft = () => alert(
+      router.back()
+  );
+  const onClickRight = () => alert(
+      router.push('/search')
+  );
   // const active = ref("index");
   const onChange = (index) => Toast(`标签 ${index}`);
 </script>
