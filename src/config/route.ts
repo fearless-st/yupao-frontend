@@ -6,6 +6,7 @@ import SearchPage from "../pages/SearchPage.vue";
 import UserEditPage from "../pages/UserEditPage.vue";
 import UserResultPage from "../pages/UserResultPage.vue";
 import UserLoginPage from "../pages/UserLoginPage.vue";
+import TeamAddPage from "../pages/TeamAddPage.vue";
 
 const routes = [
     { path: '/', component: Index },
@@ -15,6 +16,7 @@ const routes = [
     { path: '/user/list', component: UserResultPage },
     { path: '/user/edit', component: UserEditPage },
     { path: '/user/login', component: UserLoginPage },
+    { path: '/team/add', component: TeamAddPage },
 
 ]
 

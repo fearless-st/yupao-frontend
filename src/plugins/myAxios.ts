@@ -1,6 +1,10 @@
 import axios from "axios";
 
 
+declare module 'axios' {
+    export interface AxiosResponse<T = any> extends Promise<T> {}
+}
+
 // Set config defaults when creating the instance
 const myAxios = axios.create({
     baseURL: 'http://localhost:8080/api',
