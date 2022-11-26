@@ -28,6 +28,15 @@
       </template>
       <template #footer>
         <van-button size="small" type="primary"  plain @click="doJoinTeam(team.id)">加入队伍</van-button>
+        <van-button v-if="team.userId === currentUser?.id" size="small" plain
+                    @click="doUpdateTeam(team.id)">更新队伍
+        </van-button>
+        <!-- 仅加入队伍可见 -->
+        <van-button size="small" plain @click="doQuitTeam(team.id)">退出队伍
+        </van-button>
+        <van-button v-if="team.userId === currentUser?.id" size="small" type="danger"
+                    plain @click="doDeleteTeam(team.id)">解散队伍
+        </van-button>
       </template>
     </van-card>
   </div>
@@ -42,6 +51,8 @@ import myAxios from "../plugins/myAxios";
 import {Toast} from "vant";
 
 import {useRouter} from "vue-router";
+import {onMounted, ref} from "vue";
+import {getCurrentUser} from "../services/user";
 
 interface TeamCardListProps {
   teamList: TeamType[];
@@ -69,8 +80,54 @@ const doJoinTeam = async (id:number) => {
   }
 }
 
+/**
+ * 跳转至更新队伍页
+ * @param id
+ */
+const doUpdateTeam = (id: number) => {
+  router.push({
+    path: '/team/update',
+    query: {
+      id,
+    }
+  })
+}
 
+/**
+ * 退出队伍
+ * @param id
+ */
+const doQuitTeam = async (id: number) => {
+  const res = await myAxios.post('/team/quit', {
+    teamId: id
+  });
+  if (res?.code === 0) {
+    Toast.success('操作成功');
+  } else {
+    Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
+  }
+}
 
+/**
+ * 解散队伍
+ * @param id
+ */
+const doDeleteTeam = async (id: number) => {
+  const res = await myAxios.post('/team/delete', {
+    id,
+  });
+  if (res?.code === 0) {
+    Toast.success('操作成功');
+  } else {
+    Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
+  }
+}
+
+const currentUser = ref();
+
+onMounted(async () =>{
+  currentUser.value = await getCurrentUser();
+})
 
 
 
