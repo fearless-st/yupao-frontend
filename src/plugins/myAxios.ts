@@ -1,5 +1,6 @@
 import axios from "axios";
 
+const isDev = process.env.NODE_ENV === 'development';
 
 declare module 'axios' {
     export interface AxiosResponse<T = any> extends Promise<T> {}
@@ -7,8 +8,9 @@ declare module 'axios' {
 
 // Set config defaults when creating the instance
 const myAxios = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: isDev ? 'http://localhost:8080/api' : '线上地址',
 });
+
 
 myAxios.defaults.withCredentials = true; // 允许携带 cookie
 
@@ -25,6 +27,11 @@ myAxios.interceptors.request.use(function (config) {
 myAxios.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     console.log("我收到你的响应了,",response)
+    // 未登录则跳转到登录页
+    if (response?.data?.code === 40100) {
+        const redirectUrl = window.location.href;
+        window.location.href = `/user/login?redirect=${redirectUrl}`;
+    }
     return response.data;
 }, function (error) {
     // 对响应错误做点什么

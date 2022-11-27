@@ -30,9 +30,10 @@
 import myAxios from "../plugins/myAxios.ts";
 import {Toast} from "vant";
 import {ref} from "vue";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const userAccount = ref();
 const userPassword = ref();
@@ -45,7 +46,9 @@ const onSubmit = async () => {
   });
   if (res.code == 0 && res.data != null) {
     Toast.success("登录成功");
-    router.replace("/")
+    // 跳转到之前的页面
+    const redirectUrl = route.query?.redirect?? '/';
+    window.location.href = redirectUrl;
   } else {
     Toast.fail("登录失败");
   }
